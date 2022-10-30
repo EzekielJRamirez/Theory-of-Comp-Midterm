@@ -6,8 +6,6 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("hi");
-
         //5     = 3.2x + 8.7y + 5.9z + 3.7
         //12.9  = 2.4x + 3.1y + 1.1z + 3.8
         //2     = 9.7x + 6.1y + 0.3z + 1
@@ -18,7 +16,6 @@ public class Main {
         double[][] matA = {{3.2, 8.7, 5.9},
                 {2.4, 3.1, 6.1},
                 {9.7, 6.1, 0.3}};
-        System.out.println(matA[0][2]);//row, col
 
         //matrix b will be the values on the left
         double[] matb = {5, 12.9, 2};
@@ -53,8 +50,8 @@ public class Main {
 
         double matASolved = t1 + t2 + t3;
         
-        System.out.println(t1 + " is t1\n" + t2 + " is t2\n" + t3 + " is t3");
-        System.out.println(matASolved);
+//        System.out.println(t1 + " is t1\n" + t2 + " is t2\n" + t3 + " is t3");
+        System.out.println("matrix A equates to " + matASolved);
 
         //now solve for matA but substitute whole column one by one with
         // updated b matrix. replacing col1 should give you matAx,
