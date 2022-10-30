@@ -1,101 +1,65 @@
-import java.util.Arrays;
-public class Main{
+/**
+ * Ezekiel forked this from Chris
+ */
 
+import java.util.*;
 
+public class zTest {
     public static void main(String[] args) {
+        System.out.println("hi");
 
-        // y = mx + b
-        // Init the equation
-        double[] y = new double[]{5.0, 12.9, 2.0};
+        //5     = 3.2x + 8.7y + 5.9z + 3.7
+        //12.9  = 2.4x + 3.1y + 1.1z + 3.8
+        //2     = 9.7x + 6.1y + 0.3z + 1
 
-        /*for(int i = 0; i < 3; i++){
-            System.out.println(y[i]);
-        }*/
-        //          0         1         2
-        // m = {{a1.b1,c1},{a2,b2,c2},{a3,b3,c3}}
-        double[][] m = {{3.2,8.7,5.9},{2.4,3.1,1.1},{9.7,6.1,0.3}};
-        double[] b = {3.7,3.8,1};
+        //matrix A will be the values in front of x, y, and z
+        //NOTE: I made paper calculation for 6.1 instead of 1.1 per
+        // midterm instructions, debug accordingly
+        double[][] matA = {{3.2, 8.7, 5.9},
+                {2.4, 3.1, 6.1},
+                {9.7, 6.1, 0.3}};
+        System.out.println(matA[0][2]);//row, col
 
-        // Init c
-        double[] c = {8.2,9.7,1.1};
+        //matrix b will be the values on the left
+        double[] matb = {5, 12.9, 2};
 
-        // Going to solve this via Cramer's Rule
+        //matrix s will be the values on the right with no variables attached
+        double[] mats = {3.7, 3.8, 1};
 
-        // First we need to change the equation from y = mx + b to y = mx
-        // Subtract b from the equation
-        for(int i = 0; i < 3; i++){
-            y[i] -= b[i];
+        //matrix x will the unknown variables, init with either smallest
+        // or biggest values
+        double[] matx = {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE};
+
+        // equation is b = mx + s
+        // first step is to sub s values from b matrix
+
+        for (int i = 0; i < matb.length; i++) {
+            matb[i] -= mats[i];
         }
-        /*for(int i = 0; i < 3; i++){
-            System.out.println(y[i]);
-        }*/
 
-        // x1 = Dx/D where D is our m matrix
-        // x2 = Dy/D
-        // x3 = Dz/D
+//        for (int i = 0; i < matb.length; i++) {
+//            System.out.println(matb[i]);
+//        }
 
-        // Solving Dx, Dy, Dz
-        // this
+        // now solve matrix a to get its value
 
-        double[][] Dx = injectMatrixColumn(m,y,0);
-        System.out.println("Dx:");
-        printMatrix(Dx);
+        // a = [[a0, b0, c0], [a1, b1, c1], [a2, b2, c2]]
+        // a = a0(b1*c2 - c1*b2) - b0(a1*c2 - c1*a2) + c0(a1*b2 - b1*a2)
+        //      term 1              term 2              term 3
+        //matA[row][col]
+        double t1 = matA[0][0] * (matA[1][1] * matA[2][2] - matA[1][2] * matA[1][2]);
+        double t2 = -matA[0][1] * (matA[1][0] * matA[2][2] - matA[1][2] * matA[2][0]);
+        double t3 = matA[0][2] * (matA[1][0] * matA[1][2] - matA[1][1] * matA[2][0]);
 
+        double matASolved = t1 + t2 + t3;
+        
+        System.out.println(t1 + " is t1\n" + t2 + " is t2\n" + t3 + " is t3");
+        System.out.println(matASolved);
 
-        double[][] Dy = injectMatrixColumn(m,y,1);
-        System.out.println("Dy:");
-        printMatrix(Dy);
+        //now solve for matA but substitute whole column one by one with
+        // updated b matrix. replacing col1 should give you matAx,
+        // col2 gives matAy, col3 gives matAz
+        // matAx / matA should give you x and so on
 
-        double[][] Dz = injectMatrixColumn(m,y,2);
-
-        double x1 = reduceMatrix(Dx) / reduceMatrix(m);
-        double x2 = reduceMatrix(Dy) / reduceMatrix(m);
-        double x3 = reduceMatrix(Dz) / reduceMatrix(m);
-
-        System.out.println(x1 + " " + x2 + " " + x3);
-
-        //Now that we have the x values we can multiply it by our c values and add them together, getting the final results
-        System.out.println(x1*c[0] + x2*c[1] + x3*c[2]);
-    }
-
-    // used to inject the column of data into our M matrix
-    public static double[][] injectMatrixColumn(double[][] m, double[] n, int cNum){
-        double[][] temp = Arrays.stream(m).map(double[]::clone).toArray(double[][]::new);
-        for(int i = 0; i < 3; i++){
-            temp[i][cNum] = n[i];
-        }
-        return temp;
-    }
-
-    // Reduces a 3x3 matrix into a single digit
-    public static double reduceMatrix(double[][] m){
-        double a1 = m[0][0];
-        double b1 = m[0][1];
-        double c1 = m[0][2];
-        // Set the 2x2 matrices
-        double[][] m1 = {{m[1][1],m[1][2]},{m[2][1],m[2][2]}};
-        double[][] m2 ={{m[1][0],m[1][2]},{m[2][0],m[2][2]}};
-        double[][] m3 = {{m[1][0],m[1][1]},{m[2][0],m[2][1]}};
-
-        // D = (a1 * m1) - (b1 * m2) + (c1 * m3)
-
-        return calcChunk(m1, a1) - calcChunk(m2, b1) + calcChunk(m3, c1);
-    }
-
-
-    // Takes in a 2x2 matrix and a multiplier and calculates the chunk
-    public static double calcChunk(double[][] sm, double n){
-        return n * ((sm[0][0] * sm[1][1])-(sm[0][1] * sm[1][0]));
-    }
-
-    // A helper method so that we can see what is in our matrices
-    public static void printMatrix(double[][] m){
-        for(int i=0; i<m.length; i++) {
-            // inner loop for column
-            for(int j=0; j<m[0].length; j++) {
-                System.out.print(m[i][j] + " ");
-            }
-            System.out.println(); // new line
-        }
     }
 }
