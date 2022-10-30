@@ -64,6 +64,11 @@ public class Main {
         double matAy = term(matA, matb, 1);
         double matAz = term(matA, matb, 2);
 
+        matx[0] = matAx / matASolved;
+        matx[1] = matAy / matASolved;
+        matx[2] = matAz / matASolved;
+        System.out.println(Arrays.toString(matx));
+
     }
 
     /**
@@ -100,7 +105,7 @@ public class Main {
 
         // with base case, t = 291.374
         double t = t1 - t2 + t3;
-        System.out.println(t);
+//        System.out.println(t);
 
         // replacing the original values back in
         A[0][col] = temp[0];
@@ -109,13 +114,6 @@ public class Main {
 //        for(int i = 0; i < A.length; i++) {
 //            System.out.println(Arrays.toString(A[i]));
 //        }
-        // use a loop to get to certain column so that we can call
-        // the appropriate for making a term
-
-        // observe inside the parenthesis
-//        double t1 = matA[0][0] * (matA[1][1] * matA[2][2] - matA[1][2] * matA[1][2]);
-//        double t2 = -matA[0][1] * (matA[1][0] * matA[2][2] - matA[1][2] * matA[2][0]);
-//        double t3 = matA[0][2] * (matA[1][0] * matA[1][2] - matA[1][1] * matA[2][0]);
         return t;
     }
 }
