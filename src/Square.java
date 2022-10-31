@@ -59,7 +59,7 @@ public class Square {
 
         //now fill the new matrix with correct values
 
-        for(int r = 0; r < n; r++) {    //row
+        for (int r = 0; r < n; r++) {    //row
             for (int c = 0; c < n; c++) {   //col
                 //adding 1 to row of matRec causes submatrix to come from lower rows
                 //adding 1 to col of matRec makes submatrix from later columns
