@@ -24,37 +24,69 @@ import java.util.*;
 public class Square {
     public static void main(String[] args) {
         int nxn = 4;
+        int x = 3;
         double[][] matA = new double[nxn][nxn];
 //        System.out.println();
 
-        double[][] matXX = new double[nxn][nxn];
+        double[][] matXX = new double[x][x];
 
         initMat(nxn, matA, false);
-        initMat(nxn, matXX, true);
+        initMat(x, matXX, false);
 
-        for (int i = 0; i < nxn; i++) {
-            System.out.println(Arrays.toString(matA[i]));
-//        for debug purpose
-        }
-        System.out.println();
+//        for (int i = 0; i < nxn; i++) {
+//            System.out.println(Arrays.toString(matA[i]));
+////        for debug purpose
+//        }
+//        System.out.println();
 
-        for (int i = 0; i < nxn; i++) {
-            System.out.println(Arrays.toString(matXX[i]));
-//        for debug purpose
-        }
-
+        subMat(matXX);
 //        rec(nxn, matA);
     }
 
     /**
      * this method will look at getting a specified submatrix
      * statically. then use this info to make a dynamic method
+     * <p>
+     * pass in a matrix and view it
      */
-    public static void subMat() {
+    public static void subMat(double[][] matrix) {
         //something
+        for (int i = 0; i < matrix.length; i++) {
+            System.out.println(Arrays.toString(matrix[i]));
+//        for debug purpose
+        }
+        System.out.println();
+
+        System.out.println(Arrays.toString(matrix[0]));
+
+        for (int i = 0; i < matrix.length; i++) {
+            System.out.println(matrix[0][i]);
+        }
+
+        // if the head comes from col 0 use col + 1
+        // if head comes from last col use col
+        // if head comes from somewhere after col 0 and before final col, exclude that col
+        // sub 1
+        // make variable here that tells us which head we using to make current sub matrix
+        // this var will increment after every loop to tell which col to exclude
+        double[][] sub1 = new double[matrix.length - 1][matrix.length - 1];
+        for (int r = 0; r < sub1.length; r++) { //row
+            //something
+            for (int c = 0; c < sub1.length; c++) {
+                // if equals 0 don't plug in the column values into sub matrix
+                if (c == 0) {
+                    sub1[r][c] = matrix[r][c + 1];
+                }
+            }
+        }
+        // sub 2
+        double[][] sub2 = new double[matrix.length - 1][matrix.length - 1];
+        // sub 3
+        double[][] sub3 = new double[matrix.length - 1][matrix.length - 1];
+
     }
 
-    public static void initMat(int n, double[][] matrix, boolean randomize) {
+    public static double[][] initMat(int n, double[][] matrix, boolean randomize) {
         Random rand = new Random();
 
         for (int r = 0; r < n; r++) {
@@ -65,13 +97,15 @@ public class Square {
                     //RANDOM ASSIGNMENT
                     //fill cols of matrix in current row
                     //the range defined by rand is from 0 to .nextInt(VALUE) - 1
-                    matrix[r][c] = rand.nextInt(n * 2 + 1);
+                    matrix[r][c] = rand.nextInt(n + 10);
                 } else {
                     //BASE CASE VALUES
                     matrix[r][c] = (r * n) + c;
                 }
             }
         }
+
+        return matrix;
     }
 
     public static double rec(int n, double[][] matRec) {
